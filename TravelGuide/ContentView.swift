@@ -10,14 +10,10 @@ import RealityKit
 import RealityKitContent
 
 struct ContentView: View {
-
+// d89f779d1ead3317c7b01937565854f4
     var body: some View {
         VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
-
-            Text("Hello, world!")
-
+            Image("boeingFlying")
             ToggleImmersiveSpaceButton()
         }
         .padding()
