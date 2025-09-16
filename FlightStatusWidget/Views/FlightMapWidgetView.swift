@@ -23,7 +23,7 @@ struct FlightMapWidgetView: View {
     }
     
     var body: some View {
-        VStack {
+        ZStack {
             if let mapImage = mapImage {
                 Image(uiImage: mapImage)
                     .resizable()
@@ -39,10 +39,30 @@ struct FlightMapWidgetView: View {
                 }
             }
 
-            Text("Vuelo \(flight.flight?.number)")
-                .font(.headline)
-            Text("Estado: \(status)")
-                .font(.subheadline)
+            VStack {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            // Usuario en la puerta
+                            Label("Puerta \(flight.departure?.gate ?? "—")", systemImage: "figure.walk.circle.fill")
+                                .font(.caption2)
+                                .padding(6)
+                                .background(.green.opacity(0.8))
+                                .foregroundColor(.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                            // Avión en tierra
+                            Label("Avión", systemImage: "airplane.circle.fill")
+                                .font(.caption2)
+                                .padding(6)
+                                .background(.blue.opacity(0.8))
+                                .foregroundColor(.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                        }
+                    }
+                    Spacer()
+                }
+                .padding()
         }
     }
 }

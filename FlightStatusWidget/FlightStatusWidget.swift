@@ -11,13 +11,13 @@ import AppIntents
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> FlightEntry {
-        FlightEntry(date: Date(), flight: MockData.flight, configuration: ConfigurationAppIntent(), mapImage: nil)
+        FlightEntry(date: Date(), flight: MockData.flight, configuration: ConfigurationAppIntent(), mapImage: nil, slideIndex: 0)
     }
     
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> FlightEntry {
         let flight = MockData.flight
         let image = await snapshotMap(for: flight)
-        return FlightEntry(date: Date(), flight: flight, configuration: configuration, mapImage: image)
+        return FlightEntry(date: Date(), flight: flight, configuration: configuration, mapImage: image, slideIndex: 0)
     }
 
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<FlightEntry> {
@@ -27,12 +27,32 @@ struct Provider: AppIntentTimelineProvider {
         let flight = await fetchFlightData(flightNumber: configuration.flightNumber) ?? MockData.flight
         let image = await snapshotMap(for: flight)
 
-        let entry = FlightEntry(date: currentDate, flight: flight, configuration: configuration, mapImage: image)
-        entries.append(entry)
+        // Slide 0 (detalles)
+        let entry1 = FlightEntry(
+            date: currentDate,
+            flight: flight,
+            configuration: configuration,
+            mapImage: image,
+            slideIndex: 0
+        )
+        entries.append(entry1)
 
-        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
+        // Slide 1 (mapa) -> aparece 30s después
+        let entry2 = FlightEntry(
+            date: Calendar.current.date(byAdding: .second, value: 30, to: currentDate)!,
+            flight: flight,
+            configuration: configuration,
+            mapImage: image,
+            slideIndex: 1
+        )
+        entries.append(entry2)
+
+        // Repetir slideshow cada minuto
+        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
+
         return Timeline(entries: entries, policy: .after(nextUpdate))
     }
+
 
     
     private func fetchFlightData(flightNumber: String) async -> Flight? {
@@ -46,20 +66,32 @@ struct FlightEntry: TimelineEntry {
     let date: Date
     let flight: Flight
     let configuration: ConfigurationAppIntent
-    let mapImage: UIImage?   // <- snapshot opcional
+    let mapImage: UIImage?
+    let slideIndex: Int   // <- 0 = detalles, 1 = mapa
 }
+
 struct FlightStatusWidgetEntryView: View {
     var entry: Provider.Entry
     @Environment(\.widgetFamily) var family
-    
+
     var body: some View {
         switch family {
-        case .systemSmall: FlightInfoWidgetView(flight: entry.flight)
-        case .systemMedium: FlightMapWidgetView(flight: entry.flight, mapImage: entry.mapImage)
-        default: FlightInfoWidgetView(flight: entry.flight)
+//        case .systemSmall:
+//            FlightInfoWidgetView(flight: entry.flight)
+
+        case .systemMedium:
+//            if entry.slideIndex == 0 {
+                FlightDetailsWidgetView(flight: entry.flight)
+//            } else {
+//                FlightMapWidgetView(flight: entry.flight, mapImage: entry.mapImage)
+//            }
+
+        default:
+            FlightDetailsWidgetView(flight: entry.flight)
         }
     }
 }
+
 
 
 struct FlightStatusWidget: Widget {
