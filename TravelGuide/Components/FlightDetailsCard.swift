@@ -12,71 +12,123 @@ struct FlightDetailsCard: View {
     @State private var offset = CGSize.zero
     var removal: (() -> Void)? = nil
     
+    private var statusColor: Color {
+        switch flight.status.lowercased() {
+        case "active": return .green
+        case "landed": return .blue
+        case "delayed": return .orange
+        case "cancelled": return .red
+        default: return .gray
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(flight.flightNumber)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
+            // Header
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(flight.departure.iata)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                    
+                    Text(flight.flightNumber)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                // Flight path arrow
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(.secondary)
+                        .frame(width: 8, height: 8)
+                    
+                    Image(systemName: "airplane")
+                        .font(.title2)
+                        .foregroundStyle(.primary)
+                        .rotationEffect(.degrees(90))
+                    //todo: modify this with the actual route
+                    Rectangle()
+                        .fill(.secondary.opacity(0.3))
+                        .frame(height: 1)
+                        .frame(maxWidth: 30)
+                    
+                    Circle()
+                        .fill(.secondary)
+                        .frame(width: 8, height: 8)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(flight.arrival.iata)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                    
+                    // Status
+                    Text(flight.status)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(statusColor.opacity(0.2))
+                        .foregroundStyle(statusColor)
+                        .clipShape(Capsule())
+                }
+            }
+            
+            Divider()
+                .opacity(0.3)
+            
+            // Flight info
+            HStack(alignment: .top, spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                    FlightInfoSection(
+                        title: "Departure",
+                        airport: flight.departure.airport,
+                        iata: flight.departure.iata,
+                        time: flight.departure.scheduledTime,
+                        terminal: flight.departure.terminal,
+                        gate: flight.departure.gate
+                    )
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    FlightInfoSection(
+                        title: "Arrival",
+                        airport: flight.arrival.airport,
+                        iata: flight.arrival.iata,
+                        time: flight.arrival.scheduledTime,
+                        terminal: flight.arrival.terminal,
+                        gate: flight.arrival.gate
+                    )
+                }
+            }
+            
+            HStack(spacing: 16) {
+                Label("Terminal \(flight.departure.terminal ?? "—")", systemImage: "building.2")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
+                Label("Gate \(flight.departure.gate ?? "—")", systemImage: "door.left.hand.open")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
+                Spacer()
                 
                 Text(flight.airline)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            // Información de salida
-            FlightInfoSection(
-                title: "Liftoff",
-                airport: flight.departure.airport,
-                iata: flight.departure.iata,
-                time: flight.departure.scheduledTime,
-                terminal: flight.departure.terminal,
-                gate: flight.departure.gate
-            )
-            
-            // Información de llegada
-            FlightInfoSection(
-                title: "Arrival",
-                airport: flight.arrival.airport,
-                iata: flight.arrival.iata,
-                time: flight.arrival.scheduledTime,
-                terminal: flight.arrival.terminal,
-                gate: flight.arrival.gate
-            )
-            
-            // Estado del vuelo
-            HStack {
-                StatusBadge(status: flight.status)
-                Spacer()
-                Text("Programmed: \(flight.scheduledDeparture) - \(flight.scheduledArrival)")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.tertiary)
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-        .offset(x: offset.width, y: 0)
-        .rotationEffect(.degrees(Double(offset.width / 40)))
-        .opacity(2 - Double(abs(offset.width / 50)))
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    offset = gesture.translation
-                }
-                .onEnded { _ in
-                    if abs(offset.width) > 100 {
-                        removal?()
-                    } else {
-                        withAnimation {
-                            offset = .zero
-                        }
-                    }
-                }
-        )
+        .padding(20)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
+        .padding(.horizontal, 20)
     }
 }
 
