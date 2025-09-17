@@ -64,7 +64,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Models/Models.swift,
-				Views/FlightDetailsSmallWidgetView.swift,
 				Views/SwiftUIView.swift,
 			);
 			target = 3C2A81822E782F1B00CD55AF /* TravelGuide */;
