@@ -76,18 +76,18 @@ struct FlightStatusWidgetEntryView: View {
 
     var body: some View {
         switch family {
-//        case .systemSmall:
-//            FlightInfoWidgetView(flight: entry.flight)
+        case .systemSmall:
+            SmallFlightWidgetView(flight: entry.flight)
 
         case .systemMedium:
 //            if entry.slideIndex == 0 {
-                FlightDetailsWidgetView(flight: entry.flight)
+            FlightDetailsMediumWidgetView(flight: entry.flight)
 //            } else {
 //                FlightMapWidgetView(flight: entry.flight, mapImage: entry.mapImage)
 //            }
 
         default:
-            FlightDetailsWidgetView(flight: entry.flight)
+            SmallFlightWidgetView(flight: entry.flight)
         }
     }
 }
@@ -100,7 +100,6 @@ struct FlightStatusWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
             FlightStatusWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
         .supportedFamilies([.systemSmall, .systemMedium])
         .configurationDisplayName("Estado de Vuelo")
