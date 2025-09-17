@@ -15,25 +15,37 @@ struct FlightInfoSection: View {
     let terminal: String?
     let gate: String?
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.primary)
-            
-            Text("\(airport) (\(iata))")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-            
-            Text(time)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            
-            if let terminal = terminal, let gate = gate {
-                Text("Terminal \(terminal) • Gate \(gate)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+    private var formattedTime: String {
+        if let colonIndex = time.firstIndex(of: " ") {
+            let timeOnly = String(time[time.index(after: colonIndex)...])
+            return timeOnly.prefix(5).description
         }
+        return time
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+                .tracking(0.5)
+            
+            Text(iata)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
+            
+            Text(formattedTime)
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+            
+            Text(airport)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

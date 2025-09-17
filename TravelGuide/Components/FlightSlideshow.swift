@@ -13,12 +13,12 @@ struct FlightSlideshow: View {
     @State private var offset = CGSize.zero
     
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             ZStack {
                 ForEach(flights.indices, id: \.self) { index in
                     if index == currentIndex {
                         FlightDetailsCard(flight: flights[index], removal: {
-                            withAnimation {
+                            withAnimation(.easeInOut(duration: 0.3)) {
                                 removeCard()
                             }
                         })
@@ -32,7 +32,7 @@ struct FlightSlideshow: View {
                                 }
                                 .onEnded { _ in
                                     if abs(offset.width) > 100 {
-                                        withAnimation {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
                                             if offset.width > 0 {
                                                 previousFlight()
                                             } else {
@@ -40,7 +40,7 @@ struct FlightSlideshow: View {
                                             }
                                         }
                                     } else {
-                                        withAnimation {
+                                        withAnimation(.spring()) {
                                             offset = .zero
                                         }
                                     }
@@ -49,31 +49,27 @@ struct FlightSlideshow: View {
                     }
                 }
             }
-            .frame(height: 300)
-            
-            HStack(spacing: 8) {
+            .frame(height: 320)
+            HStack(spacing: 6) {
                 ForEach(0..<flights.count, id: \.self) { index in
-                    Circle()
-                        .fill(index == currentIndex ? Color.blue : Color.gray.opacity(0.3))
-                        .frame(width: 8, height: 8)
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(index == currentIndex ? .primary : .secondary)
+                        .frame(width: index == currentIndex ? 16 : 6, height: 6)
+                        .animation(.spring(duration: 0.3), value: currentIndex)
                 }
             }
-            .padding()
+            .padding(.bottom)
         }
     }
     
     private func nextFlight() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            currentIndex = min(currentIndex + 1, flights.count - 1)
-            offset = .zero
-        }
+        currentIndex = (currentIndex + 1) % flights.count // Loop back to start
+        offset = .zero
     }
     
     private func previousFlight() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            currentIndex = max(currentIndex - 1, 0)
-            offset = .zero
-        }
+        currentIndex = currentIndex == 0 ? flights.count - 1 : currentIndex - 1
+        offset = .zero
     }
     
     private func removeCard() {
