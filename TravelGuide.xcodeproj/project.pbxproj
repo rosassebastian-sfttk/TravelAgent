@@ -63,6 +63,7 @@
 		3C7307C12E78CB5700FC9ACE /* Exceptions for "FlightStatusWidget" folder in "TravelGuide" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Views/FlightDetailsSmallWidgetView.swift,
 				Views/SwiftUIView.swift,
 			);
 			target = 3C2A81822E782F1B00CD55AF /* TravelGuide */;
