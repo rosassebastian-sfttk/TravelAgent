@@ -62,7 +62,7 @@ struct SmallFlightWidgetView: View {
                         .foregroundStyle(.primary)
                         .widgetAccentable(false)
                 }
-                Label("Puerta \(flight.departure?.gate ?? "—")", systemImage: "door.left.hand.open")
+                Label("Gate \(flight.departure?.gate ?? "—")", systemImage: "door.left.hand.open")
                     .font(.caption)
                     .foregroundStyle(.primary)
                     .widgetAccentable(false)
