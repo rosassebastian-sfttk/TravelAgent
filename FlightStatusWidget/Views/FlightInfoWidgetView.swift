@@ -77,7 +77,7 @@ struct FlightInfoWidgetView: View {
                         Image(systemName: "clock")
                             .foregroundColor(.white)
                         
-                        Text("Abordaje: \(scheduledTime.addingTimeInterval(-30 * 60), style: .time)")
+                        Text("Boarding: \(scheduledTime.addingTimeInterval(-30 * 60), style: .time)")
                             .font(.caption)
                             .foregroundColor(.white)
                     }

@@ -23,17 +23,17 @@ struct FlightStatusCard: View {
                 }
                 
                 Spacer()
-                
-                Image("UALogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+//                
+//                Image("UALogo")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 120, height: 50)
+//                    .clipShape(RoundedRectangle(cornerRadius: 8))
             }
             
             HStack(spacing: 4) {
                 Image(systemName: "clock")
-                Text("Arriving in")
+                Text("Boarding in")
                     .foregroundColor(.secondary)
                     .font(.caption)
                 Text("60 min")

@@ -24,7 +24,6 @@ struct FlightDetailsCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(flight.departure.iata)
@@ -39,7 +38,6 @@ struct FlightDetailsCard: View {
                 
                 Spacer()
                 
-                // Flight path arrow
                 HStack(spacing: 8) {
                     Circle()
                         .fill(.secondary)
@@ -49,7 +47,7 @@ struct FlightDetailsCard: View {
                         .font(.title2)
                         .foregroundStyle(.primary)
                         .rotationEffect(.degrees(90))
-                    //todo: modify this with the actual route
+                    
                     Rectangle()
                         .fill(.secondary.opacity(0.3))
                         .frame(height: 1)
@@ -68,7 +66,6 @@ struct FlightDetailsCard: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.primary)
                     
-                    // Status
                     Text(flight.status)
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -83,7 +80,6 @@ struct FlightDetailsCard: View {
             Divider()
                 .opacity(0.3)
             
-            // Flight info
             HStack(alignment: .top, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
                     FlightInfoSection(

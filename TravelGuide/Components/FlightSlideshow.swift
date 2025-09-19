@@ -63,7 +63,7 @@ struct FlightSlideshow: View {
     }
     
     private func nextFlight() {
-        currentIndex = (currentIndex + 1) % flights.count // Loop back to start
+        currentIndex = (currentIndex + 1) % flights.count 
         offset = .zero
     }
     

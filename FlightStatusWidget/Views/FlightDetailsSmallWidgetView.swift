@@ -26,10 +26,10 @@ struct SmallFlightWidgetView: View {
         VStack(alignment: .leading, spacing: 8) {
             //  section with airplane icon and flight info
             HStack(alignment: .top) {
-                Image("UALogo-small")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 40)
+//                Image("UALogo-small")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(height: 40)
                 
                 Spacer()
                 
@@ -73,9 +73,19 @@ struct SmallFlightWidgetView: View {
         .padding()
         // Conditional background based on rendering mode
         .if(widgetRenderingMode == .fullColor) { view in
-            view.containerBackground(for: .widget) {
-                Color.white
-            }
+            view.containerBackground(Color.white, for: .widget)
+        }
+    }
+}
+
+extension View {
+    /// Conditionally applies a transformation to a view
+    @ViewBuilder
+    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
         }
     }
 }

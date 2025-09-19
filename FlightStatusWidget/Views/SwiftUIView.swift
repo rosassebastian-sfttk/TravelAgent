@@ -49,12 +49,12 @@ struct FlightDetailsMediumWidgetView: View {
                 }
                 
                 Spacer()
-                
-                Image("UALogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 50)
-//
+//                
+//                Image("UALogo")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(height: 50)
+
                 
                 Spacer()
                 
@@ -85,10 +85,20 @@ struct FlightDetailsMediumWidgetView: View {
                 }
                 
                 if let scheduledTime = flight.departure?.scheduled?.toDate() {
-                    Label("\(scheduledTime.addingTimeInterval(-30 * 60), style: .time)", systemImage: "clock")
-                        .font(.caption)
-                        .foregroundStyle(.primary)
-                        .widgetAccentable(false)
+                    HStack {
+                        Image(systemName: "clock")
+                        
+                        VStack(alignment: .leading) {
+                            Text("Boarding in")
+                                    .font(.caption)
+                            
+                            Text("60 min")
+                                .foregroundColor(.green)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    
                 }
                 Label(flight.aircraft?.iata ?? "B738", systemImage: "airplane")
                     .font(.caption)
@@ -236,14 +246,4 @@ struct MockData {
 }
 
 
-extension View {
-    /// Conditionally applies a transformation to a view
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
+
