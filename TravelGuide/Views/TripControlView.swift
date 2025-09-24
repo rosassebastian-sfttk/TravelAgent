@@ -27,7 +27,7 @@ struct TripControlView: View {
             VStack {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                    TextField("Search in DFW (ej. restrooms, restaurants...)", text: $searchText)
+                    TextField("Search in DFW (ex. restrooms, restaurants...)", text: $searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 .padding(.top, 16)

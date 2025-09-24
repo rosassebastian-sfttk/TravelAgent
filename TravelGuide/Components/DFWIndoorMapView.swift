@@ -59,7 +59,9 @@ struct DFWIndoorMapView: View {
             }
         }
         .onChange(of: selection) { _, newSelection in
-            if newSelection == nil {
+            if let newPOI = newSelection {
+                selectPOI(newPOI) 
+            } else {
                 route = nil
             }
         }
